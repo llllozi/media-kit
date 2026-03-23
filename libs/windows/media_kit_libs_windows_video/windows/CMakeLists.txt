@@ -63,12 +63,21 @@ function(check_directory_exists_and_not_empty dir result_var)
   endif()
 endfunction()
 
-# libmpv archive containing the pre-built shared libraries & headers.
-set(LIBMPV "mpv-dev-x86_64-20251210-git-ad59ff1.7z")
+# Detect architecture and set appropriate libmpv archive
+# FLUTTER_TARGET_PLATFORM is set by Flutter build system (windows-x64 or windows-arm64)
+if(${FLUTTER_TARGET_PLATFORM} STREQUAL "windows-x64")
+  set(LIBMPV_ARCH "x86_64")
+  set(LIBMPV "mpv-dev-x86_64-20251210-git-ad59ff1.7z")
+  set(LIBMPV_SHA256 "53212bb8886d76d041ecd023a29e6213ada6fb5afedb8970610b396435833b99")
+else()
+  # windows-arm64
+  set(LIBMPV_ARCH "aarch64")
+  set(LIBMPV "mpv-dev-aarch64-20251210-git-ad59ff1.7z")
+  set(LIBMPV_SHA256 "8e3746e9d88351dd19be0e0da0c8745a089a3d07d5dd8a84c10de7f47ba88bcd")
+endif()
 
-# Download URL & SHA256 hash of the libmpv archive.
+# Download URL for the libmpv archive from Predidit's release
 set(LIBMPV_URL "https://github.com/Predidit/libmpv-win32-video-cmake/releases/download/20251210/${LIBMPV}")
-set(LIBMPV_SHA256 "53212bb8886d76d041ecd023a29e6213ada6fb5afedb8970610b396435833b99")
 
 # Download location of the libmpv archive.
 set(LIBMPV_ARCHIVE "${CMAKE_BINARY_DIR}/${LIBMPV}")
